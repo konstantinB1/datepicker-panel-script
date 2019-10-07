@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  
+  table, th {
+    border-collapse: collapse;
+    border: 1px solid gray;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  td, th {
+    padding: 16px;
+  }
+
+  td {
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .next-prev {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .body-container {
+    margin: auto;
+    width: 500px;
+  }
+
+  </style>
+</head>
+<body>
+
+<div class="body-container">
+  <table>
+    <thead>
+      <tr>
+        <th>mon</th>
+        <th>tue</th>
+        <th>wen</th>
+        <th>thu</th>
+        <th>fri</th>
+        <th>sat</th>
+        <th>sun</th>
+      </tr>
+      <tr>
+        <th colspan="7" id="date-info"></th>
+      </tr>
+    </thead>
+    <tbody class="datepicker-body">
+      <tr>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+      </tr>
+      <tr>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+      </tr>
+      <tr>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+      </tr>
+      <tr>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+      </tr>
+      <tr>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+      </tr>
+      <tr>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+        <td>
+          <a></a>
+        </td>
+        <td>
+          <a></a>
+        </td> 
+      </tr>
+    </tbody>
+  </table>
+  <div class="next-prev">
+    <a href="#" id="prev">Prev</a>
+    <a href="#" id="next">Next</a>
+  </div>  
+</div>
+
+<script src="lib/index.js"></script>
+<script>
+
+const datepicker = new DatepickerPanelScript()
+const dpBody = document.querySelectorAll('.datepicker-body tr')
+const curPanel = datepicker.computePanel().formatMatrixGrid()
+
+function rerenderMonthPanel () {
+  const data = curPanel.data
+  const len = data.length
+
+  document.querySelector('#date-info').innerHTML = `${datepicker.getMonthName} ${datepicker.getFullYear}`
+
+  for (let i = 0; i < len; i++) {
+    const row = data[i]
+    const getRowTr = dpBody[i]
+    
+    if (getRowTr) {
+      const getCells = getRowTr.querySelectorAll('td a')
+      for (let x = 0; x < getCells.length; x++) {
+        const cell = getCells[x]
+        const dateData = row[x]
+        cell.innerHTML = dateData.day
+      }
+    }
+  }  
+}
+
+rerenderMonthPanel()
+
+document.querySelector('#prev').addEventListener('click', () => {
+  datepicker.prevMonth().formatMatrixGrid()
+  rerenderMonthPanel()
+})
+
+document.querySelector('#next').addEventListener('click', () => {
+  datepicker.nextMonth().formatMatrixGrid()
+  rerenderMonthPanel()
+})
+
+
+</script>
+</body>
+</html>
