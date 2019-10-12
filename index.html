@@ -17,17 +17,27 @@
   }
 
   td, th {
-    padding: 16px;
+    padding: 14px;
   }
 
   td {
     vertical-align: middle;
     text-align: center;
+    border: 1px solid transparent;
+  }
+
+  .today {
+    background: tomato;
+    color: white;
   }
 
   .next-prev {
     display: flex;
     justify-content: space-between;
+  }
+
+  .active {
+    border: 1px solid red;
   }
 
   .body-container {
@@ -205,14 +215,26 @@
 <script src="lib/index.js"></script>
 <script>
 
-const datepicker = new DatepickerPanelScript()
+const datepicker = new DatepickerPanelScript(null, {
+  listener: dateObj => {
+    const { date, el } = dateObj
+    el.classList.toggle('active')
+    console.log(dateObj)
+  }
+})
+
 const dpBody = document.querySelectorAll('.datepicker-body tr')
-const curPanel = datepicker.computePanel().formatMatrixGrid()
+const curPanel = datepicker.computePanel()
 
 function rerenderMonthPanel () {
-  const data = curPanel.data
+  const data = curPanel.formatMatrixGrid()
   const len = data.length
+  const today = document.querySelector('.today')
 
+  if (today) {
+    today.classList.remove('today')
+  }
+  
   document.querySelector('#date-info').innerHTML = `${datepicker.getMonthName} ${datepicker.getFullYear}`
 
   for (let i = 0; i < len; i++) {
@@ -220,25 +242,31 @@ function rerenderMonthPanel () {
     const getRowTr = dpBody[i]
     
     if (getRowTr) {
-      const getCells = getRowTr.querySelectorAll('td a')
+      const getCells = getRowTr.querySelectorAll('td')
       for (let x = 0; x < getCells.length; x++) {
         const cell = getCells[x]
-        const dateData = row[x]
-        cell.innerHTML = dateData.day
+        const dateData = row[x] || {}
+        dateData.addEl(cell)
+
+        if (dateData.isToday) {
+          cell.classList.add('today')
+        }
+
+        cell.innerHTML = dateData && dateData.day
       }
     }
   }  
 }
 
-rerenderMonthPanel()
+document.addEventListener('DOMContentLoaded', rerenderMonthPanel)
 
 document.querySelector('#prev').addEventListener('click', () => {
-  datepicker.prevMonth().formatMatrixGrid()
+  datepicker.prevMonth()
   rerenderMonthPanel()
 })
 
 document.querySelector('#next').addEventListener('click', () => {
-  datepicker.nextMonth().formatMatrixGrid()
+  datepicker.nextMonth()
   rerenderMonthPanel()
 })
 
