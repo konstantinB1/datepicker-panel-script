@@ -1,4 +1,4 @@
-import { DatepickerScript } from '../lib/index.js'
+import { DatepickerScript } from '../lib/Datepicker.js'
 
 const datepicker = new DatepickerScript()
 
