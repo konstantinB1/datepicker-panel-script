@@ -1,6 +1,10 @@
 import { DatepickerScript } from '../lib/Datepicker.js'
 
-const datepicker = new DatepickerScript()
+const datepicker = new DatepickerScript({
+  listener: el => {
+    console.log(el)
+  }
+})
 
 const dpBody = document.querySelectorAll('.datepicker-body tr')
 const curPanel = datepicker.computePanel()
